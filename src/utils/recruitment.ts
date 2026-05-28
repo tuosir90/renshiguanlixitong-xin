@@ -4,6 +4,11 @@ import {
 } from '@/constants';
 import type { RecruitmentStatus } from '@/constants';
 
+export const getRecruitmentRecordListSort = () => ({
+  createdAt: -1,
+  _id: -1,
+} as const);
+
 // 兼容旧状态值，统一映射到新流程状态
 export const normalizeRecruitmentStatus = (status?: string): RecruitmentStatus => {
   switch (status) {

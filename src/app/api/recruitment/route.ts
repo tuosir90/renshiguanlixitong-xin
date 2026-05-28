@@ -6,6 +6,7 @@ import { RECRUITMENT_STATUS_VALUES } from '@/constants';
 import {
   calculateTrialDays,
   getCompatibleRecruitmentStatuses,
+  getRecruitmentRecordListSort,
   normalizeRecruitmentRecord,
   requiresArrivalDate,
 } from '@/utils/recruitment';
@@ -74,7 +75,7 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit;
     const [rawRecords, total] = await Promise.all([
       RecruitmentRecord.find(query)
-        .sort({ interviewDate: -1 })
+        .sort(getRecruitmentRecordListSort())
         .skip(skip)
         .limit(limit)
         .lean(),
