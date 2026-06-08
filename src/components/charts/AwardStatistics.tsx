@@ -24,14 +24,8 @@ import {
   LineChart,
   Line
 } from 'recharts';
-import { 
-  TrendingUp, 
-  Award, 
-  Building2,
-  Trophy,
-  Medal,
-  Star
-} from 'lucide-react';
+import { TrendingUp, Award, Building2, Trophy } from 'lucide-react';
+import { CHART_COLORS, chartAxisProps, chartGridProps, chartTooltipProps } from '@/lib/chart-theme';
 
 interface StatisticsData {
   awardLevelStats: Array<{
@@ -86,15 +80,13 @@ interface AwardStatisticsProps {
   refreshTrigger: number;
 }
 
-// 奖项等级配置
-const AWARD_LEVEL_CONFIG = {
-  special: { label: '特等奖', color: '#FFD700', icon: Trophy },
-  first: { label: '一等奖', color: '#E53E3E', icon: Medal },
-  second: { label: '二等奖', color: '#3182CE', icon: Award },
-  excellent: { label: '优秀员工', color: '#4CAF50', icon: Star }
+// 奖项等级标签配置
+const AWARD_LEVEL_LABELS: Record<string, string> = {
+  special: '特等奖',
+  first: '一等奖',
+  second: '二等奖',
+  excellent: '优秀员工',
 };
-
-const COLORS = ['#FFD700', '#E53E3E', '#3182CE', '#4CAF50', '#8884D8'];
 
 export default function AwardStatistics({ refreshTrigger }: AwardStatisticsProps) {
   const [data, setData] = useState<StatisticsData | null>(null);
@@ -128,13 +120,13 @@ export default function AwardStatistics({ refreshTrigger }: AwardStatisticsProps
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {[...Array(4)].map((_, i) => (
           <Card key={i}>
             <CardContent className="p-6">
               <div className="animate-pulse">
-                <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
-                <div className="h-32 bg-gray-200 rounded"></div>
+                <div className="mb-4 h-4 w-1/4 rounded bg-muted"></div>
+                <div className="h-32 rounded bg-muted"></div>
               </div>
             </CardContent>
           </Card>
@@ -145,7 +137,7 @@ export default function AwardStatistics({ refreshTrigger }: AwardStatisticsProps
 
   if (!data) {
     return (
-      <div className="text-center py-8 text-muted-foreground">
+      <div className="py-8 text-center text-muted-foreground">
         暂无统计数据
       </div>
     );
@@ -153,7 +145,7 @@ export default function AwardStatistics({ refreshTrigger }: AwardStatisticsProps
 
   // 准备奖项等级分布数据
   const awardLevelChartData = data.awardLevelStats.map(stat => ({
-    name: AWARD_LEVEL_CONFIG[stat._id as keyof typeof AWARD_LEVEL_CONFIG]?.label || stat._id,
+    name: AWARD_LEVEL_LABELS[stat._id] || stat._id,
     count: stat.count,
     totalBonus: stat.totalBonus,
     avgScore: Math.round(stat.avgScore * 10) / 10
@@ -178,8 +170,8 @@ export default function AwardStatistics({ refreshTrigger }: AwardStatisticsProps
   return (
     <div className="space-y-6">
       {/* 年份选择 */}
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">年度评优统计分析</h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-semibold tracking-tight">年度评优统计分析</h2>
         <Select value={selectedYear} onValueChange={setSelectedYear}>
           <SelectTrigger className="w-[120px]">
             <SelectValue placeholder="全部年份" />
@@ -195,12 +187,12 @@ export default function AwardStatistics({ refreshTrigger }: AwardStatisticsProps
         </Select>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* 奖项等级分布 */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Award className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Award className="h-4 w-4 text-muted-foreground" />
               奖项等级分布
             </CardTitle>
           </CardHeader>
@@ -217,14 +209,13 @@ export default function AwardStatistics({ refreshTrigger }: AwardStatisticsProps
                     return `${name || ''}: ${count || 0}`;
                   }}
                   outerRadius={80}
-                  fill="#8884d8"
                   dataKey="count"
                 >
                   {awardLevelChartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip {...chartTooltipProps} />
               </PieChart>
             </ResponsiveContainer>
           </CardContent>
@@ -233,24 +224,25 @@ export default function AwardStatistics({ refreshTrigger }: AwardStatisticsProps
         {/* 部门获奖统计 */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Building2 className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Building2 className="h-4 w-4 text-muted-foreground" />
               部门获奖统计
             </CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={departmentChartData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip 
+                <CartesianGrid {...chartGridProps} />
+                <XAxis dataKey="name" {...chartAxisProps} />
+                <YAxis {...chartAxisProps} />
+                <Tooltip
+                  {...chartTooltipProps}
                   formatter={(value, name) => [
-                    value, 
+                    value,
                     name === 'count' ? '获奖数量' : '平均得分'
                   ]}
                 />
-                <Bar dataKey="count" fill="#8884d8" name="获奖数量" />
+                <Bar dataKey="count" fill={CHART_COLORS[0]} name="获奖数量" radius={[3, 3, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -259,31 +251,33 @@ export default function AwardStatistics({ refreshTrigger }: AwardStatisticsProps
         {/* 年度趋势 */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 text-base">
+              <TrendingUp className="h-4 w-4 text-muted-foreground" />
               年度获奖趋势
             </CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={yearlyTrendData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="year" />
-                <YAxis />
-                <Tooltip />
-                <Line 
-                  type="monotone" 
-                  dataKey="totalAwards" 
-                  stroke="#8884d8" 
+                <CartesianGrid {...chartGridProps} />
+                <XAxis dataKey="year" {...chartAxisProps} />
+                <YAxis {...chartAxisProps} />
+                <Tooltip {...chartTooltipProps} />
+                <Line
+                  type="monotone"
+                  dataKey="totalAwards"
+                  stroke={CHART_COLORS[0]}
                   name="获奖总数"
                   strokeWidth={2}
+                  dot={{ r: 3 }}
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="avgScore" 
-                  stroke="#82ca9d" 
+                <Line
+                  type="monotone"
+                  dataKey="avgScore"
+                  stroke={CHART_COLORS[2]}
                   name="平均得分"
                   strokeWidth={2}
+                  dot={{ r: 3 }}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -293,25 +287,25 @@ export default function AwardStatistics({ refreshTrigger }: AwardStatisticsProps
         {/* 奖金分布统计 */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Trophy className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Trophy className="h-4 w-4 text-muted-foreground" />
               奖金分布统计
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {awardLevelChartData.map((item, index) => (
-                <div key={item.name} className="flex items-center justify-between p-3 border rounded-lg">
+                <div key={item.name} className="flex items-center justify-between rounded-lg border border-border p-3">
                   <div className="flex items-center gap-3">
-                    <div 
-                      className="w-4 h-4 rounded-full" 
-                      style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                    <div
+                      className="h-3 w-3 rounded-full"
+                      style={{ backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }}
                     ></div>
-                    <span className="font-medium">{item.name}</span>
+                    <span className="text-sm font-medium">{item.name}</span>
                   </div>
                   <div className="text-right">
-                    <div className="font-medium">¥{item.totalBonus.toLocaleString()}</div>
-                    <div className="text-sm text-muted-foreground">{item.count}人</div>
+                    <div className="text-sm font-medium tabular-nums">¥{item.totalBonus.toLocaleString()}</div>
+                    <div className="text-xs text-muted-foreground">{item.count}人</div>
                   </div>
                 </div>
               ))}
@@ -323,42 +317,42 @@ export default function AwardStatistics({ refreshTrigger }: AwardStatisticsProps
       {/* 部门详细统计 */}
       <Card>
         <CardHeader>
-          <CardTitle>部门详细统计</CardTitle>
+          <CardTitle className="text-base">部门详细统计</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {data.departmentStats.map((dept) => (
-              <div key={dept._id} className="p-4 border rounded-lg">
-                <div className="font-medium text-lg mb-2">{dept._id}</div>
+              <div key={dept._id} className="rounded-lg border border-border p-4">
+                <div className="mb-3 text-base font-medium">{dept._id}</div>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">获奖总数:</span>
+                    <span className="text-sm text-muted-foreground">获奖总数</span>
                     <Badge variant="outline">{dept.count}人</Badge>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">总奖金:</span>
+                    <span className="text-sm text-muted-foreground">总奖金</span>
                     <Badge variant="secondary">
                       ¥{dept.totalBonus.toLocaleString()}
                     </Badge>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">平均得分:</span>
+                    <span className="text-sm text-muted-foreground">平均得分</span>
                     <Badge variant="outline">
                       {dept.avgScore.toFixed(1)}分
                     </Badge>
                   </div>
-                  <div className="grid grid-cols-2 gap-1 mt-3">
-                    <div className="text-xs text-center p-1 bg-yellow-50 rounded">
-                      特等奖: {dept.specialCount}
+                  <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
+                    <div className="rounded border border-border p-1.5 text-center text-muted-foreground">
+                      特等奖 {dept.specialCount}
                     </div>
-                    <div className="text-xs text-center p-1 bg-orange-50 rounded">
-                      一等奖: {dept.firstCount}
+                    <div className="rounded border border-border p-1.5 text-center text-muted-foreground">
+                      一等奖 {dept.firstCount}
                     </div>
-                    <div className="text-xs text-center p-1 bg-blue-50 rounded">
-                      二等奖: {dept.secondCount}
+                    <div className="rounded border border-border p-1.5 text-center text-muted-foreground">
+                      二等奖 {dept.secondCount}
                     </div>
-                    <div className="text-xs text-center p-1 bg-green-50 rounded">
-                      优秀: {dept.excellentCount}
+                    <div className="rounded border border-border p-1.5 text-center text-muted-foreground">
+                      优秀 {dept.excellentCount}
                     </div>
                   </div>
                 </div>
@@ -371,25 +365,25 @@ export default function AwardStatistics({ refreshTrigger }: AwardStatisticsProps
       {/* 员工获奖排行榜 */}
       <Card>
         <CardHeader>
-          <CardTitle>员工获奖排行榜</CardTitle>
+          <CardTitle className="text-base">员工获奖排行榜</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
             {data.employeeRanking.slice(0, 10).map((employee, index) => (
-              <div key={employee.employeeId} className="flex items-center justify-between p-3 border rounded-lg">
+              <div key={employee.employeeId} className="flex items-center justify-between rounded-lg border border-border p-3">
                 <div className="flex items-center gap-3">
                   <Badge variant="outline" className="font-mono">
                     #{index + 1}
                   </Badge>
                   <div>
-                    <div className="font-medium">{employee.name}</div>
+                    <div className="text-sm font-medium">{employee.name}</div>
                     <div className="text-sm text-muted-foreground">
                       {employee.department} • {employee.position}
                     </div>
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="font-medium">{employee.totalAwards}次获奖</div>
+                  <div className="text-sm font-medium tabular-nums">{employee.totalAwards}次获奖</div>
                   <div className="text-sm text-muted-foreground">
                     最佳排名: #{employee.bestRank} • ¥{employee.totalBonus.toLocaleString()}
                   </div>

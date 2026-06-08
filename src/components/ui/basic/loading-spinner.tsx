@@ -15,7 +15,7 @@ export function LoadingSpinner({ size = 'md', className }: LoadingSpinnerProps) 
   };
 
   return (
-    <div className={cn('animate-spin rounded-full border-2 border-gray-300 border-t-blue-600', sizeClasses[size], className)} />
+    <div className={cn('animate-spin rounded-full border-2 border-muted border-t-foreground', sizeClasses[size], className)} />
   );
 }
 
@@ -47,7 +47,7 @@ export function TableLoading({ rows = 5, columns = 6 }: TableLoadingProps) {
           {Array.from({ length: columns }).map((_, colIndex) => (
             <div
               key={colIndex}
-              className="h-4 bg-gray-200 rounded animate-pulse flex-1"
+              className="h-4 flex-1 animate-pulse rounded bg-muted"
             />
           ))}
         </div>
@@ -64,10 +64,10 @@ export function CardLoading({ count = 3 }: CardLoadingProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {Array.from({ length: count }).map((_, index) => (
-        <div key={index} className="border rounded-lg p-4 space-y-3">
-          <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4" />
-          <div className="h-3 bg-gray-200 rounded animate-pulse w-1/2" />
-          <div className="h-3 bg-gray-200 rounded animate-pulse w-full" />
+        <div key={index} className="space-y-3 rounded-lg border p-4">
+          <div className="h-4 w-3/4 animate-pulse rounded bg-muted" />
+          <div className="h-3 w-1/2 animate-pulse rounded bg-muted" />
+          <div className="h-3 w-full animate-pulse rounded bg-muted" />
         </div>
       ))}
     </div>

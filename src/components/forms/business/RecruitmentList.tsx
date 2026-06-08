@@ -232,50 +232,50 @@ export default function RecruitmentList({
       key: 'totalRecruitment',
       title: '招聘总人数',
       icon: Users,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-100'
+      color: 'text-foreground',
+      bgColor: 'bg-muted'
     },
     {
       key: 'pendingDecisionCount',
       title: '待定人数',
       icon: MoreHorizontal,
-      color: 'text-slate-600',
-      bgColor: 'bg-slate-100'
+      color: 'text-foreground',
+      bgColor: 'bg-muted'
     },
     {
       key: 'pendingArrivalCount',
       title: '待到岗人数',
       icon: UserCheck,
-      color: 'text-indigo-600',
-      bgColor: 'bg-indigo-100'
+      color: 'text-foreground',
+      bgColor: 'bg-muted'
     },
     {
       key: 'noShowCount',
       title: '未到岗人数',
       icon: UserX,
-      color: 'text-red-600',
-      bgColor: 'bg-red-100'
+      color: 'text-foreground',
+      bgColor: 'bg-muted'
     },
     {
       key: 'trialingCount',
       title: '试岗中人数',
       icon: Clock,
-      color: 'text-yellow-600',
-      bgColor: 'bg-yellow-100'
+      color: 'text-foreground',
+      bgColor: 'bg-muted'
     },
     {
       key: 'regularizedCount',
       title: '已转正人数',
       icon: UserCheck,
-      color: 'text-green-600',
-      bgColor: 'bg-green-100'
+      color: 'text-foreground',
+      bgColor: 'bg-muted'
     },
     {
       key: 'rejectedCount',
       title: '已拒绝人数',
       icon: UserX,
-      color: 'text-rose-600',
-      bgColor: 'bg-rose-100'
+      color: 'text-foreground',
+      bgColor: 'bg-muted'
     }
   ];
 
@@ -417,10 +417,10 @@ export default function RecruitmentList({
                       <TableCell>{record.city || '宜昌'}</TableCell>
                       <TableCell>{GENDER_LABELS[record.gender]}</TableCell>
                       <TableCell className="text-center">
-                        {record.age ? <span className="font-medium text-blue-600">{record.age}岁</span> : '-'}
+                        {record.age ? <span className="font-medium tabular-nums">{record.age}岁</span> : '-'}
                       </TableCell>
                       <TableCell onClick={(e) => e.stopPropagation()}>
-                        {record.idCard ? <IdCardDisplay idCard={record.idCard} /> : <span className="text-gray-400 text-sm">未填写</span>}
+                        {record.idCard ? <IdCardDisplay idCard={record.idCard} /> : <span className="text-sm text-muted-foreground">未填写</span>}
                       </TableCell>
                       <TableCell className="font-mono text-sm">{record.phone}</TableCell>
                       <TableCell>

@@ -32,12 +32,18 @@ export const RECRUITMENT_STATUS_BADGE_CLASS_NAMES: Record<
   RecruitmentStatus,
   string
 > = {
-  [RECRUITMENT_STATUS.PENDING_DECISION]: 'bg-slate-100 text-slate-800',
-  [RECRUITMENT_STATUS.PENDING_ARRIVAL]: 'bg-blue-100 text-blue-800',
-  [RECRUITMENT_STATUS.NO_SHOW]: 'bg-gray-100 text-gray-800',
-  [RECRUITMENT_STATUS.TRIALING]: 'bg-yellow-100 text-yellow-800',
-  [RECRUITMENT_STATUS.REGULARIZED]: 'bg-green-100 text-green-800',
-  [RECRUITMENT_STATUS.REJECTED]: 'bg-red-100 text-red-800',
+  [RECRUITMENT_STATUS.PENDING_DECISION]:
+    'border-transparent bg-muted text-muted-foreground',
+  [RECRUITMENT_STATUS.PENDING_ARRIVAL]:
+    'border-transparent bg-foreground/10 text-foreground',
+  [RECRUITMENT_STATUS.NO_SHOW]:
+    'border-transparent bg-muted text-muted-foreground',
+  [RECRUITMENT_STATUS.TRIALING]:
+    'border-transparent bg-warning/15 text-warning',
+  [RECRUITMENT_STATUS.REGULARIZED]:
+    'border-transparent bg-success/15 text-success',
+  [RECRUITMENT_STATUS.REJECTED]:
+    'border-transparent bg-destructive/15 text-destructive',
 };
 
 export const ARRIVAL_DATE_OPTIONAL_RECRUITMENT_STATUSES = [

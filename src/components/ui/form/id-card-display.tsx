@@ -80,13 +80,13 @@ export function IdCardDisplay({ idCard, className = '' }: IdCardDisplayProps) {
           variant="ghost"
           size="sm"
           onClick={handleEyeClick}
-          className="h-6 w-6 p-0 hover:bg-gray-100"
+          className="h-6 w-6 p-0"
           title={isVisible ? '隐藏身份证号' : '查看身份证号'}
         >
           {isVisible ? (
-            <EyeOff className="h-3 w-3 text-gray-500" />
+            <EyeOff className="h-3 w-3 text-muted-foreground" />
           ) : (
-            <Eye className="h-3 w-3 text-gray-500" />
+            <Eye className="h-3 w-3 text-muted-foreground" />
           )}
         </Button>
       </div>
@@ -116,7 +116,7 @@ export function IdCardDisplay({ idCard, className = '' }: IdCardDisplayProps) {
               />
             </div>
             {passwordError && (
-              <div className="text-sm text-red-500 text-center">
+              <div className="text-center text-sm text-destructive">
                 {passwordError}
               </div>
             )}

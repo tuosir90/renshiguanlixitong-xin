@@ -47,9 +47,9 @@ interface EmployeeListProps {
 
 // 状态颜色映射
 const statusColors = {
-  active: 'bg-green-100 text-green-800',
-  resigned: 'bg-red-100 text-red-800',
-  leave: 'bg-yellow-100 text-yellow-800',
+  active: 'border-transparent bg-success/15 text-success',
+  resigned: 'border-transparent bg-destructive/15 text-destructive',
+  leave: 'border-transparent bg-warning/15 text-warning',
 };
 
 export default function EmployeeList({
@@ -237,29 +237,29 @@ export default function EmployeeList({
       key: 'totalEmployees',
       title: '员工总数',
       icon: Users,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-100'
+      color: 'text-foreground',
+      bgColor: 'bg-muted'
     },
     {
       key: 'activeEmployees',
       title: '在职员工数',
       icon: UserCheck,
-      color: 'text-green-600',
-      bgColor: 'bg-green-100'
+      color: 'text-foreground',
+      bgColor: 'bg-muted'
     },
     {
       key: 'avgWorkDays',
       title: '平均在职天数',
       icon: Calendar,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-100'
+      color: 'text-foreground',
+      bgColor: 'bg-muted'
     },
     {
       key: 'topScoreEmployee',
       title: '积分最多员工',
       icon: Trophy,
-      color: 'text-yellow-600',
-      bgColor: 'bg-yellow-100'
+      color: 'text-foreground',
+      bgColor: 'bg-muted'
     }
   ];
 
@@ -520,14 +520,14 @@ export default function EmployeeList({
                         </Badge>
                       </TableCell>
                       <TableCell className="text-center">
-                        <span className="font-medium text-green-600">
+                        <span className="font-medium tabular-nums">
                           {employee.workStatus === 'active' 
                             ? calculateWorkingDays(new Date(employee.regularDate))
                             : employee.workingDays} 天
                         </span>
                       </TableCell>
                       <TableCell className="text-center">
-                        <span className="font-medium text-blue-600">
+                        <span className="font-medium tabular-nums">
                           {employee.totalScore}
                         </span>
                       </TableCell>

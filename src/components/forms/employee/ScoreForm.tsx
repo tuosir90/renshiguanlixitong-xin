@@ -196,20 +196,20 @@ export function ScoreForm({
                     </FormControl>
                     <SelectContent>
                       <div className="p-2">
-                        <div className="text-sm font-medium text-green-600 mb-2">加分项目</div>
+                        <div className="mb-2 text-sm font-medium text-success">加分项目</div>
                         {SCORE_BEHAVIORS.ADDITIONS.map((behavior) => (
                           <SelectItem key={behavior.type} value={behavior.type}>
-                            <div className="flex items-center justify-between w-full">
+                            <div className="flex w-full items-center justify-between">
                               <span>{behavior.description}</span>
-                              <Badge variant="default" className="ml-2 bg-green-100 text-green-800">
+                              <Badge variant="default" className="ml-2 border-transparent bg-success/15 text-success">
                                 +{behavior.score}
                               </Badge>
                             </div>
                           </SelectItem>
                         ))}
                       </div>
-                      <div className="p-2 border-t">
-                        <div className="text-sm font-medium text-red-600 mb-2">扣分项目</div>
+                      <div className="border-t p-2">
+                        <div className="mb-2 text-sm font-medium text-destructive">扣分项目</div>
                         {SCORE_BEHAVIORS.DEDUCTIONS.map((behavior) => (
                           <SelectItem key={behavior.type} value={behavior.type}>
                             <div className="flex items-center justify-between w-full">
@@ -230,7 +230,7 @@ export function ScoreForm({
                         <span className="text-sm font-medium">{behaviorInfo.description}</span>
                         <Badge 
                           variant={behaviorInfo.category === 'addition' ? 'default' : 'destructive'}
-                          className={behaviorInfo.category === 'addition' ? 'bg-green-100 text-green-800' : ''}
+                          className={behaviorInfo.category === 'addition' ? 'border-transparent bg-success/15 text-success' : ''}
                         >
                           {behaviorInfo.score > 0 ? '+' : ''}{behaviorInfo.score}分
                         </Badge>

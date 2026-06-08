@@ -60,10 +60,10 @@ interface AwardFormProps {
 
 // 奖项等级配置
 const AWARD_LEVELS = [
-  { value: 'special', label: '特等奖', color: 'bg-yellow-500' },
-  { value: 'first', label: '一等奖', color: 'bg-orange-500' },
-  { value: 'second', label: '二等奖', color: 'bg-blue-500' },
-  { value: 'excellent', label: '优秀员工', color: 'bg-green-500' }
+  { value: 'special', label: '特等奖', color: 'bg-foreground' },
+  { value: 'first', label: '一等奖', color: 'bg-foreground/70' },
+  { value: 'second', label: '二等奖', color: 'bg-foreground/45' },
+  { value: 'excellent', label: '优秀员工', color: 'bg-foreground/25' }
 ];
 
 // 奖金金额配置
@@ -238,7 +238,7 @@ export default function AwardForm({ open, onOpenChange, onSuccess, editData }: A
                     <Select onValueChange={field.onChange} value={field.value} disabled={isLoading}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder={isLoading ? "加载中..." : "选择员工"} />
+                          <SelectValue placeholder={isLoading ? "加���中..." : "选择员工"} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>

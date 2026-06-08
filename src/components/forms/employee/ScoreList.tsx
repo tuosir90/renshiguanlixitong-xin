@@ -146,7 +146,7 @@ export function ScoreList({
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
           <div className="flex-1">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
               <Input
                 placeholder="搜索员工姓名、员工ID或记录原因..."
                 value={searchTerm}
@@ -239,7 +239,7 @@ export function ScoreList({
                     <TableCell>
                       <Badge 
                         variant={record.scoreChange > 0 ? "default" : "destructive"}
-                        className={record.scoreChange > 0 ? "bg-green-100 text-green-800" : ""}
+                        className={record.scoreChange > 0 ? "border-transparent bg-success/15 text-success" : ""}
                       >
                         {record.scoreChange > 0 ? '+' : ''}{record.scoreChange}
                       </Badge>
@@ -269,7 +269,7 @@ export function ScoreList({
                           </DropdownMenuItem>
                           <DropdownMenuItem 
                             onClick={() => onDelete(record._id)}
-                            className="text-red-600"
+                            className="text-destructive"
                           >
                             <Trash2 className="h-4 w-4 mr-2" />
                             删除

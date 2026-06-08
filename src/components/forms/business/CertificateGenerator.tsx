@@ -46,10 +46,10 @@ const AWARD_LEVEL_LABELS = {
 };
 
 const AWARD_LEVEL_COLORS = {
-  special: 'bg-yellow-100 text-yellow-800 border-yellow-300',
-  first: 'bg-gray-100 text-gray-800 border-gray-300',
-  second: 'bg-orange-100 text-orange-800 border-orange-300',
-  excellent: 'bg-green-100 text-green-800 border-green-300'
+  special: 'border-transparent bg-foreground text-background',
+  first: 'border-transparent bg-foreground/70 text-background',
+  second: 'border-transparent bg-foreground/45 text-background',
+  excellent: 'border-transparent bg-muted text-muted-foreground'
 };
 
 export default function CertificateGenerator({ awards, selectedYear }: CertificateGeneratorProps) {
@@ -164,7 +164,7 @@ export default function CertificateGenerator({ awards, selectedYear }: Certifica
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">奖金：</span>
-                        <span className="text-green-600 font-medium">
+                        <span className="font-medium tabular-nums">
                           ¥{award.bonusAmount.toLocaleString()}
                         </span>
                       </div>

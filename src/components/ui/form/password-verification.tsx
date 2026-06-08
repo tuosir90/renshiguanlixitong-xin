@@ -87,7 +87,7 @@ export function PasswordVerification({
             />
           </div>
           {passwordError && (
-            <div className="text-sm text-red-500 text-center">
+            <div className="text-center text-sm text-destructive">
               {passwordError}
             </div>
           )}

@@ -91,10 +91,10 @@ interface GenerateResult {
 
 // 奖项等级配置
 const AWARD_LEVELS = {
-  special: { label: '特等奖', icon: Trophy, color: 'text-yellow-600', bgColor: 'bg-yellow-50' },
-  first: { label: '一等奖', icon: Medal, color: 'text-orange-600', bgColor: 'bg-orange-50' },
-  second: { label: '二等奖', icon: Award, color: 'text-blue-600', bgColor: 'bg-blue-50' },
-  excellent: { label: '优秀员工', icon: Star, color: 'text-green-600', bgColor: 'bg-green-50' }
+  special: { label: '特等奖', icon: Trophy, color: 'text-foreground', bgColor: 'bg-muted' },
+  first: { label: '一等奖', icon: Medal, color: 'text-foreground', bgColor: 'bg-muted' },
+  second: { label: '二等奖', icon: Award, color: 'text-foreground', bgColor: 'bg-muted' },
+  excellent: { label: '优秀员工', icon: Star, color: 'text-foreground', bgColor: 'bg-muted' }
 };
 
 export default function AwardGenerate({ open, onOpenChange, onSuccess }: AwardGenerateProps) {
@@ -244,15 +244,15 @@ export default function AwardGenerate({ open, onOpenChange, onSuccess }: AwardGe
                       <p><strong>奖项配额：</strong></p>
                       <div className="grid grid-cols-1 gap-2 ml-4">
                         <div className="flex items-center gap-2">
-                          <Trophy className="h-4 w-4 text-yellow-600" />
+                          <Trophy className="h-4 w-4 text-muted-foreground" />
                           <span>特等奖：1名 (¥5,000) - 积分第1名</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Medal className="h-4 w-4 text-orange-600" />
+                          <Medal className="h-4 w-4 text-muted-foreground" />
                           <span>一等奖：1名 (¥3,000) - 积分第2名</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Award className="h-4 w-4 text-blue-600" />
+                          <Award className="h-4 w-4 text-muted-foreground" />
                           <span>二等奖：1名 (¥2,000) - 积分第3名</span>
                         </div>
                       </div>
@@ -288,7 +288,7 @@ export default function AwardGenerate({ open, onOpenChange, onSuccess }: AwardGe
                         <p className="text-sm text-muted-foreground">总员工数</p>
                         <p className="text-2xl font-bold">{generateResult.statistics.totalEmployees}</p>
                       </div>
-                      <Users className="h-8 w-8 text-blue-500" />
+                      <Users className="h-8 w-8 text-muted-foreground" />
                     </div>
                   </CardContent>
                 </Card>
@@ -300,7 +300,7 @@ export default function AwardGenerate({ open, onOpenChange, onSuccess }: AwardGe
                         <p className="text-sm text-muted-foreground">符合条件</p>
                         <p className="text-2xl font-bold">{generateResult.statistics.qualifiedEmployees}</p>
                       </div>
-                      <CheckCircle className="h-8 w-8 text-green-500" />
+                      <CheckCircle className="h-8 w-8 text-muted-foreground" />
                     </div>
                   </CardContent>
                 </Card>
@@ -312,7 +312,7 @@ export default function AwardGenerate({ open, onOpenChange, onSuccess }: AwardGe
                         <p className="text-sm text-muted-foreground">获奖人数</p>
                         <p className="text-2xl font-bold">{generateResult.statistics.awardedEmployees}</p>
                       </div>
-                      <Trophy className="h-8 w-8 text-yellow-500" />
+                      <Trophy className="h-8 w-8 text-muted-foreground" />
                     </div>
                   </CardContent>
                 </Card>
@@ -324,7 +324,7 @@ export default function AwardGenerate({ open, onOpenChange, onSuccess }: AwardGe
                         <p className="text-sm text-muted-foreground">总奖金</p>
                         <p className="text-2xl font-bold">¥{generateResult.statistics.totalBonusAmount.toLocaleString()}</p>
                       </div>
-                      <DollarSign className="h-8 w-8 text-green-500" />
+                      <DollarSign className="h-8 w-8 text-muted-foreground" />
                     </div>
                   </CardContent>
                 </Card>

@@ -63,10 +63,10 @@ interface AwardListProps {
 
 // 奖项等级配置
 const AWARD_LEVELS = {
-  special: { label: '特等奖', icon: Trophy, color: 'bg-yellow-500 text-white' },
-  first: { label: '一等奖', icon: Medal, color: 'bg-orange-500 text-white' },
-  second: { label: '二等奖', icon: Award, color: 'bg-blue-500 text-white' },
-  excellent: { label: '优秀员工', icon: Star, color: 'bg-green-500 text-white' }
+  special: { label: '特等奖', icon: Trophy, color: 'bg-foreground text-background' },
+  first: { label: '一等奖', icon: Medal, color: 'bg-foreground/70 text-background' },
+  second: { label: '二等奖', icon: Award, color: 'bg-foreground/45 text-background' },
+  excellent: { label: '优秀员工', icon: Star, color: 'bg-muted text-muted-foreground' }
 };
 
 export default function AwardList({ refreshTrigger }: AwardListProps) {
@@ -202,7 +202,7 @@ export default function AwardList({ refreshTrigger }: AwardListProps) {
   // 获取奖项等级显示
   const getAwardLevelDisplay = (level: string) => {
     const config = AWARD_LEVELS[level as keyof typeof AWARD_LEVELS];
-    if (!config) return { label: level, icon: Star, color: 'bg-gray-500 text-white' };
+    if (!config) return { label: level, icon: Star, color: 'bg-muted text-muted-foreground' };
     return config;
   };
 
@@ -210,10 +210,10 @@ export default function AwardList({ refreshTrigger }: AwardListProps) {
     return (
       <div className="space-y-4">
         <div className="animate-pulse">
-          <div className="h-10 bg-gray-200 rounded mb-4"></div>
+          <div className="mb-4 h-10 rounded bg-muted"></div>
           <div className="space-y-2">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-16 bg-gray-200 rounded"></div>
+              <div key={i} className="h-16 rounded bg-muted"></div>
             ))}
           </div>
         </div>
@@ -226,7 +226,7 @@ export default function AwardList({ refreshTrigger }: AwardListProps) {
       {/* 搜索和筛选 */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
           <Input
             placeholder="搜索员工姓名、员工ID或部门..."
             value={searchTerm}
@@ -350,7 +350,7 @@ export default function AwardList({ refreshTrigger }: AwardListProps) {
                       </span>
                     </TableCell>
                     <TableCell>
-                      <span className="font-mono text-green-600 font-medium">
+                      <span className="font-mono font-medium tabular-nums">
                         ¥{award.bonusAmount.toLocaleString()}
                       </span>
                     </TableCell>
@@ -371,7 +371,7 @@ export default function AwardList({ refreshTrigger }: AwardListProps) {
                           </DropdownMenuItem>
                           <DropdownMenuItem 
                             onClick={() => handleDelete(award._id)}
-                            className="text-red-600"
+                            className="text-destructive"
                           >
                             <Trash2 className="mr-2 h-4 w-4" />
                             删除

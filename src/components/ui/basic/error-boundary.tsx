@@ -54,9 +54,9 @@ interface ErrorFallbackProps {
 
 function DefaultErrorFallback({ error, resetError }: ErrorFallbackProps) {
   return (
-    <Card className="max-w-md mx-auto mt-8">
+    <Card className="mx-auto mt-8 max-w-md">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-red-600">
+        <CardTitle className="flex items-center gap-2 text-destructive">
           <AlertTriangle className="h-5 w-5" />
           出现错误
         </CardTitle>
@@ -66,9 +66,9 @@ function DefaultErrorFallback({ error, resetError }: ErrorFallbackProps) {
           抱歉，页面出现了错误。请尝试刷新页面或联系技术支持。
         </p>
         {error && (
-          <details className="text-xs text-gray-500">
+          <details className="text-xs text-muted-foreground">
             <summary className="cursor-pointer">错误详情</summary>
-            <pre className="mt-2 p-2 bg-gray-100 rounded text-xs overflow-auto">
+            <pre className="mt-2 overflow-auto rounded bg-muted p-2 text-xs">
               {error.message}
             </pre>
           </details>
@@ -97,10 +97,10 @@ export function ErrorMessage({
   className 
 }: ErrorMessageProps) {
   return (
-    <div className={`text-center p-8 ${className}`}>
-      <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-      <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
-      <p className="text-gray-600 mb-4">{message}</p>
+    <div className={`p-8 text-center ${className}`}>
+      <AlertTriangle className="mx-auto mb-4 h-12 w-12 text-destructive" />
+      <h3 className="mb-2 text-lg font-semibold text-foreground">{title}</h3>
+      <p className="mb-4 text-muted-foreground">{message}</p>
       {onRetry && (
         <Button onClick={onRetry} variant="outline">
           <RefreshCw className="h-4 w-4 mr-2" />
@@ -128,10 +128,10 @@ export function EmptyState({
   className 
 }: EmptyStateProps) {
   return (
-    <div className={`text-center p-8 ${className}`}>
+    <div className={`p-8 text-center ${className}`}>
       {icon && <div className="mb-4">{icon}</div>}
-      <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
-      <p className="text-gray-600 mb-4">{message}</p>
+      <h3 className="mb-2 text-lg font-semibold text-foreground">{title}</h3>
+      <p className="mb-4 text-muted-foreground">{message}</p>
       {action && action}
     </div>
   );
