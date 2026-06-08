@@ -201,53 +201,53 @@ export default function RecruitmentDashboard() {
             </div>
 
             {/* 数据摘要 */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-blue-900 mb-2">面试状态</h3>
-                <div className="space-y-1 text-sm">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+              <div className="rounded-lg border border-border bg-card p-5">
+                <h3 className="mb-3 text-sm font-medium text-foreground">面试状态</h3>
+                <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span>待定:</span>
-                    <span className="font-medium">{data.basicStats.pendingDecisionCount}人</span>
+                    <span className="text-muted-foreground">待定</span>
+                    <span className="font-medium tabular-nums">{data.basicStats.pendingDecisionCount} 人</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>待到岗:</span>
-                    <span className="font-medium">{data.basicStats.pendingArrivalCount}人</span>
+                    <span className="text-muted-foreground">待到岗</span>
+                    <span className="font-medium tabular-nums">{data.basicStats.pendingArrivalCount} 人</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>试岗中:</span>
-                    <span className="font-medium">{data.basicStats.trialingCount}人</span>
+                    <span className="text-muted-foreground">试岗中</span>
+                    <span className="font-medium tabular-nums">{data.basicStats.trialingCount} 人</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>未到岗:</span>
-                    <span className="font-medium">{data.basicStats.noShowCount}人</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-green-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-green-900 mb-2">转正情况</h3>
-                <div className="space-y-1 text-sm">
-                  <div className="flex justify-between">
-                    <span>已转正:</span>
-                    <span className="font-medium">{data.basicStats.regularizedCount}人</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>转正率:</span>
-                    <span className="font-medium">{data.basicStats.regularizationRate.toFixed(1)}%</span>
+                    <span className="text-muted-foreground">未到岗</span>
+                    <span className="font-medium tabular-nums">{data.basicStats.noShowCount} 人</span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-red-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-red-900 mb-2">拒绝情况</h3>
-                <div className="space-y-1 text-sm">
+              <div className="rounded-lg border border-border bg-card p-5">
+                <h3 className="mb-3 text-sm font-medium text-foreground">转正情况</h3>
+                <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span>已拒绝:</span>
-                    <span className="font-medium">{data.basicStats.rejectedCount}人</span>
+                    <span className="text-muted-foreground">已转正</span>
+                    <span className="font-medium tabular-nums">{data.basicStats.regularizedCount} 人</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>拒绝率:</span>
-                    <span className="font-medium">
+                    <span className="text-muted-foreground">转正率</span>
+                    <span className="font-medium tabular-nums">{data.basicStats.regularizationRate.toFixed(1)}%</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-lg border border-border bg-card p-5">
+                <h3 className="mb-3 text-sm font-medium text-foreground">拒绝情况</h3>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">已拒绝</span>
+                    <span className="font-medium tabular-nums">{data.basicStats.rejectedCount} 人</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">拒绝率</span>
+                    <span className="font-medium tabular-nums">
                       {((data.basicStats.rejectedCount / data.basicStats.totalCandidates) * 100).toFixed(1)}%
                     </span>
                   </div>

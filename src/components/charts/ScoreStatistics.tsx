@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/layout/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/form/select';
 import { Badge } from '@/components/ui/basic/badge';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
-import { TrendingUp, TrendingDown, BarChart3, PieChart as PieChartIcon } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { TrendingUp, BarChart3, PieChart as PieChartIcon } from 'lucide-react';
+import { CHART_COLORS, chartAxisProps, chartGridProps, chartTooltipProps } from '@/lib/chart-theme';
 
 interface StatisticsData {
   employeeRanking: Array<{
@@ -77,8 +78,8 @@ export function ScoreStatistics() {
           <Card key={i}>
             <CardContent className="p-6">
               <div className="animate-pulse">
-                <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
-                <div className="h-32 bg-gray-200 rounded"></div>
+                <div className="mb-4 h-4 w-1/4 rounded bg-muted"></div>
+                <div className="h-32 rounded bg-muted"></div>
               </div>
             </CardContent>
           </Card>
@@ -96,9 +97,6 @@ export function ScoreStatistics() {
       </Card>
     );
   }
-
-  // 图表颜色配置
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
 
   // 准备部门对比数据
   const departmentChartData = data.departmentComparison.map(dept => ({
@@ -118,8 +116,8 @@ export function ScoreStatistics() {
   return (
     <div className="space-y-6">
       {/* 年份选择 */}
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">积分统计分析</h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-semibold tracking-tight">积分统计分析</h2>
         <Select value={selectedYear.toString()} onValueChange={(value) => setSelectedYear(parseInt(value))}>
           <SelectTrigger className="w-[120px]">
             <SelectValue />
@@ -141,25 +139,26 @@ export function ScoreStatistics() {
         {/* 月度积分趋势 */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 text-base">
+              <TrendingUp className="h-4 w-4 text-muted-foreground" />
               月度积分趋势
             </CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={data.monthlyTrend}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="monthName" />
-                <YAxis />
-                <Tooltip 
+                <CartesianGrid {...chartGridProps} />
+                <XAxis dataKey="monthName" {...chartAxisProps} />
+                <YAxis {...chartAxisProps} />
+                <Tooltip
+                  {...chartTooltipProps}
                   formatter={(value, name) => [
-                    value, 
+                    value,
                     name === 'addition' ? '加分' : '扣分'
                   ]}
                 />
-                <Bar dataKey="addition" fill="#10B981" name="加分" />
-                <Bar dataKey="deduction" fill="#EF4444" name="扣分" />
+                <Bar dataKey="addition" fill="var(--success)" name="加分" radius={[3, 3, 0, 0]} />
+                <Bar dataKey="deduction" fill="var(--destructive)" name="扣分" radius={[3, 3, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -168,24 +167,25 @@ export function ScoreStatistics() {
         {/* 部门积分对比 */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <BarChart3 className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 text-base">
+              <BarChart3 className="h-4 w-4 text-muted-foreground" />
               部门积分对比
             </CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={departmentChartData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip 
+                <CartesianGrid {...chartGridProps} />
+                <XAxis dataKey="name" {...chartAxisProps} />
+                <YAxis {...chartAxisProps} />
+                <Tooltip
+                  {...chartTooltipProps}
                   formatter={(value, name) => [
-                    value, 
+                    value,
                     name === 'totalScore' ? '总积分' : '平均积分'
                   ]}
                 />
-                <Bar dataKey="totalScore" fill="#3B82F6" name="总积分" />
+                <Bar dataKey="totalScore" fill={CHART_COLORS[0]} name="总积分" radius={[3, 3, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -194,8 +194,8 @@ export function ScoreStatistics() {
         {/* 行为类型统计 */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <PieChartIcon className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 text-base">
+              <PieChartIcon className="h-4 w-4 text-muted-foreground" />
               行为类型统计
             </CardTitle>
           </CardHeader>
@@ -212,14 +212,13 @@ export function ScoreStatistics() {
                     return `${name || ''}: ${count || 0}`;
                   }}
                   outerRadius={80}
-                  fill="#8884d8"
                   dataKey="count"
                 >
                   {behaviorChartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip {...chartTooltipProps} />
               </PieChart>
             </ResponsiveContainer>
           </CardContent>
@@ -228,37 +227,37 @@ export function ScoreStatistics() {
         {/* 积分分布统计 */}
         <Card>
           <CardHeader>
-            <CardTitle>积分分布统计</CardTitle>
+            <CardTitle className="text-base">积分分布统计</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <div className="text-center p-4 bg-green-50 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600">
+                <div className="rounded-lg border border-border p-4 text-center">
+                  <div className="text-2xl font-semibold tabular-nums text-success">
                     +{data.overallStats.totalPositiveScore}
                   </div>
-                  <div className="text-sm text-green-600">总加分</div>
+                  <div className="mt-1 text-sm text-muted-foreground">总加分</div>
                 </div>
-                <div className="text-center p-4 bg-red-50 rounded-lg">
-                  <div className="text-2xl font-bold text-red-600">
+                <div className="rounded-lg border border-border p-4 text-center">
+                  <div className="text-2xl font-semibold tabular-nums text-destructive">
                     {data.overallStats.totalNegativeScore}
                   </div>
-                  <div className="text-sm text-red-600">总扣分</div>
+                  <div className="mt-1 text-sm text-muted-foreground">总扣分</div>
                 </div>
-              </div>
-              
-              <div className="text-center p-4 bg-blue-50 rounded-lg">
-                <div className="text-2xl font-bold text-blue-600">
-                  {data.overallStats.avgScore.toFixed(1)}
-                </div>
-                <div className="text-sm text-blue-600">平均分值</div>
               </div>
 
-              <div className="text-center p-4 bg-gray-50 rounded-lg">
-                <div className="text-2xl font-bold text-gray-600">
+              <div className="rounded-lg border border-border p-4 text-center">
+                <div className="text-2xl font-semibold tabular-nums text-foreground">
+                  {data.overallStats.avgScore.toFixed(1)}
+                </div>
+                <div className="mt-1 text-sm text-muted-foreground">平均分值</div>
+              </div>
+
+              <div className="rounded-lg border border-border p-4 text-center">
+                <div className="text-2xl font-semibold tabular-nums text-foreground">
                   {data.overallStats.totalRecords}
                 </div>
-                <div className="text-sm text-gray-600">总记录数</div>
+                <div className="mt-1 text-sm text-muted-foreground">总记录数</div>
               </div>
             </div>
           </CardContent>
@@ -268,26 +267,26 @@ export function ScoreStatistics() {
       {/* 部门详细信息 */}
       <Card>
         <CardHeader>
-          <CardTitle>部门详细统计</CardTitle>
+          <CardTitle className="text-base">部门详细统计</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {data.departmentComparison.map((dept) => (
-              <div key={dept._id} className="p-4 border rounded-lg">
-                <div className="font-medium text-lg mb-2">{dept._id}</div>
+              <div key={dept._id} className="rounded-lg border border-border p-4">
+                <div className="mb-3 text-base font-medium">{dept._id}</div>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">员工数量:</span>
+                    <span className="text-sm text-muted-foreground">员工数量</span>
                     <Badge variant="outline">{dept.employeeCount}人</Badge>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">总积分:</span>
+                    <span className="text-sm text-muted-foreground">总积分</span>
                     <Badge variant={dept.totalScore >= 0 ? "default" : "destructive"}>
                       {dept.totalScore >= 0 ? '+' : ''}{dept.totalScore}
                     </Badge>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">平均积分:</span>
+                    <span className="text-sm text-muted-foreground">平均积分</span>
                     <Badge variant="secondary">
                       {dept.avgScore.toFixed(1)}
                     </Badge>

@@ -160,10 +160,10 @@ export default function CertificatePage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">正在加载证书...</p>
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-foreground"></div>
+          <p className="text-muted-foreground">正在加载证书...</p>
         </div>
       </div>
     );
@@ -171,12 +171,12 @@ export default function CertificatePage() {
 
   if (!award) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-600 mb-4">未找到获奖记录</p>
+          <p className="mb-4 text-muted-foreground">未找到获奖记录</p>
           <Link href="/awards">
             <Button variant="outline">
-              <ArrowLeft className="h-4 w-4 mr-2" />
+              <ArrowLeft className="mr-2 h-4 w-4" />
               返回年度评优
             </Button>
           </Link>
@@ -189,18 +189,18 @@ export default function CertificatePage() {
   const currentDate = new Date().toLocaleDateString('zh-CN');
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8">
+    <div className="min-h-screen bg-muted py-8">
       {/* 操作栏 */}
-      <div className="max-w-4xl mx-auto mb-6 px-4 print:hidden">
-        <div className="flex justify-between items-center">
+      <div className="mx-auto mb-6 max-w-4xl px-4 print:hidden">
+        <div className="flex items-center justify-between">
           <Link href="/awards">
             <Button variant="outline">
-              <ArrowLeft className="h-4 w-4 mr-2" />
+              <ArrowLeft className="mr-2 h-4 w-4" />
               返回年度评优
             </Button>
           </Link>
-          <Button onClick={handleDownload} className="bg-blue-600 hover:bg-blue-700">
-            <Download className="h-4 w-4 mr-2" />
+          <Button onClick={handleDownload}>
+            <Download className="mr-2 h-4 w-4" />
             下载证书
           </Button>
         </div>
