@@ -41,6 +41,7 @@ export default function RecruitmentPage() {
         limit: pagination.limit.toString(),
         ...(searchKeyword && { keyword: searchKeyword }),
         ...(filters.status && filters.status !== 'all' && { status: filters.status }),
+        ...(filters.city && filters.city !== 'all' && { city: filters.city }),
       });
 
       const response = await fetch(`/api/recruitment?${params}`);

@@ -46,6 +46,7 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '10');
     const status = searchParams.get('status');
+    const city = searchParams.get('city');
     const keyword = searchParams.get('keyword');
     const startDate = searchParams.get('startDate');
     const endDate = searchParams.get('endDate');
@@ -56,6 +57,10 @@ export async function GET(request: NextRequest) {
       query.recruitmentStatus = {
         $in: getCompatibleRecruitmentStatuses(status)
       };
+    }
+
+    if (city === '宜昌' || city === '武汉') {
+      query.city = city;
     }
 
     if (keyword) {

@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { RecruitmentRecord } from '@/types';
 import {
+  CITIES,
   GENDER_LABELS,
   RECRUITMENT_STATUS_BADGE_CLASS_NAMES,
   RECRUITMENT_STATUS_LABELS,
@@ -41,7 +42,7 @@ interface RecruitmentListProps {
   limit: number;
   onPageChange: (page: number) => void;
   onSearch: (keyword: string) => void;
-  onFilter: (filters: { status?: string }) => void;
+  onFilter: (filters: { status?: string; city?: string }) => void;
   onStatusUpdate: (
     id: string,
     data: { recruitmentStatus: RecruitmentRecord['recruitmentStatus']; arrivalDate?: string }
@@ -91,6 +92,7 @@ export default function RecruitmentList({
   isLoading = false
 }: RecruitmentListProps) {
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [cityFilter, setCityFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
   const [overviewStats, setOverviewStats] = useState<OverviewStats | null>(null);
   const [statsLoading, setStatsLoading] = useState(true);
@@ -107,8 +109,12 @@ export default function RecruitmentList({
   const totalPages = Math.ceil(total / limit);
 
   const fetchOverviewStats = async () => {
+    setStatsLoading(true);
     try {
-      const response = await fetch('/api/recruitment/overview');
+      const params = new URLSearchParams({
+        ...(cityFilter !== 'all' && { city: cityFilter }),
+      });
+      const response = await fetch(`/api/recruitment/overview?${params}`);
       const result = await response.json();
       if (result.success) {
         setOverviewStats(result.data);
@@ -122,7 +128,7 @@ export default function RecruitmentList({
 
   useEffect(() => {
     fetchOverviewStats();
-  }, []);
+  }, [cityFilter]);
 
   useEffect(() => {
     if (!detailRecord) {
@@ -142,7 +148,12 @@ export default function RecruitmentList({
 
   const handleStatusFilter = (status: string) => {
     setStatusFilter(status);
-    onFilter({ status });
+    onFilter({ status, city: cityFilter });
+  };
+
+  const handleCityFilter = (city: string) => {
+    setCityFilter(city);
+    onFilter({ status: statusFilter, city });
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -353,6 +364,20 @@ export default function RecruitmentList({
             </div>
 
             <div className="flex gap-2">
+              <Select value={cityFilter} onValueChange={handleCityFilter}>
+                <SelectTrigger className="w-[132px]">
+                  <SelectValue placeholder="公司" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">全部公司</SelectItem>
+                  {CITIES.map((city) => (
+                    <SelectItem key={city} value={city}>
+                      {city}公司
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
               <Select value={statusFilter} onValueChange={handleStatusFilter}>
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="筛选状态" />

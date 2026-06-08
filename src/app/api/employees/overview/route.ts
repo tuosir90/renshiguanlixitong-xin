@@ -1,22 +1,34 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import { Employee } from '@/models';
 
 // GET - 获取员工概览统计数据
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     await connectDB();
 
+    const { searchParams } = new URL(request.url);
+    const city = searchParams.get('city');
+    const query: Record<string, unknown> = {};
+
+    if (city === '宜昌' || city === '武汉') {
+      query.city = city;
+    }
+
     // 1. 员工总数（所有状态，与列表显示保持一致）
-    const totalEmployees = await Employee.countDocuments();
+    const totalEmployees = await Employee.countDocuments(query);
 
     // 2. 在职员工数
-    const activeEmployees = await Employee.countDocuments({ workStatus: 'active' });
+    const activeEmployees = await Employee.countDocuments({
+      ...query,
+      workStatus: 'active'
+    });
 
     // 3. 平均在职天数（计算从入司日期到现在的天数）
     const avgWorkDaysResult = await Employee.aggregate([
       {
         $match: {
+          ...query,
           workStatus: 'active',
           regularDate: { $exists: true }
         }
@@ -43,7 +55,7 @@ export async function GET() {
 
     // 4. 积分最多员工
     const topScoreEmployee = await Employee.findOne(
-      { workStatus: 'active' },
+      { ...query, workStatus: 'active' },
       { name: 1, totalScore: 1, department: 1, position: 1 }
     ).sort({ totalScore: -1 });
 

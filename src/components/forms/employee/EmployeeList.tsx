@@ -88,8 +88,12 @@ export default function EmployeeList({
 
   // 获取概览统计数据
   const fetchOverviewStats = async () => {
+    setStatsLoading(true);
     try {
-      const response = await fetch('/api/employees/overview');
+      const params = new URLSearchParams({
+        ...(cityFilter !== 'all' && { city: cityFilter }),
+      });
+      const response = await fetch(`/api/employees/overview?${params}`);
       const result = await response.json();
       if (result.success) {
         setOverviewStats(result.data);
@@ -103,7 +107,7 @@ export default function EmployeeList({
 
   useEffect(() => {
     fetchOverviewStats();
-  }, []);
+  }, [cityFilter]);
 
   const handleSearch = () => {
     onSearch(searchKeyword);
@@ -358,14 +362,14 @@ export default function EmployeeList({
             {/* 快速筛选器 */}
             <div className="flex gap-2">
               <Select value={cityFilter} onValueChange={handleCityFilterChange}>
-                <SelectTrigger className="w-[120px]">
-                  <SelectValue placeholder="城市" />
+                <SelectTrigger className="w-[132px]">
+                  <SelectValue placeholder="公司" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">全部城市</SelectItem>
+                  <SelectItem value="all">全部公司</SelectItem>
                   {CITIES.map((city) => (
                     <SelectItem key={city} value={city}>
-                      {city}
+                      {city}公司
                     </SelectItem>
                   ))}
                 </SelectContent>

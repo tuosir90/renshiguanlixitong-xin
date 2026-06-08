@@ -1,14 +1,22 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import { RecruitmentRecord } from '@/models';
 import { normalizeRecruitmentRecord } from '@/utils/recruitment';
 
 // GET - 获取招聘概览统计数据
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     await connectDB();
 
-    const rawRecords = await RecruitmentRecord.find({})
+    const { searchParams } = new URL(request.url);
+    const city = searchParams.get('city');
+    const query: Record<string, unknown> = {};
+
+    if (city === '宜昌' || city === '武汉') {
+      query.city = city;
+    }
+
+    const rawRecords = await RecruitmentRecord.find(query)
       .sort({ interviewDate: -1 })
       .lean();
     const records = rawRecords.map((record) => normalizeRecruitmentRecord(record));
