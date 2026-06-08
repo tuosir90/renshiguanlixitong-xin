@@ -162,12 +162,12 @@ export default function ScoresPage() {
   }, []);
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="mx-auto max-w-screen-xl space-y-8 px-6 py-8">
       {/* 页面标题 */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">积分管理</h1>
-          <p className="text-muted-foreground">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div className="space-y-1.5">
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground">积分管理</h1>
+          <p className="text-sm leading-relaxed text-muted-foreground">
             管理员工积分记录，查看积分统计和排行榜
           </p>
         </div>
@@ -179,54 +179,54 @@ export default function ScoresPage() {
 
       {/* 统计卡片 */}
       {statistics && (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">总记录数</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">总记录数</CardTitle>
               <BarChart3 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{statistics.overallStats.totalRecords}</div>
-              <p className="text-xs text-muted-foreground">积分记录总数</p>
+              <div className="text-2xl font-semibold tabular-nums">{statistics.overallStats.totalRecords}</div>
+              <p className="mt-1 text-xs text-muted-foreground">积分记录总数</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">总加分</CardTitle>
-              <TrendingUp className="h-4 w-4 text-green-600" />
+              <CardTitle className="text-sm font-medium text-muted-foreground">总加分</CardTitle>
+              <TrendingUp className="h-4 w-4 text-success" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">
+              <div className="text-2xl font-semibold tabular-nums text-success">
                 +{statistics.overallStats.totalPositiveScore}
               </div>
-              <p className="text-xs text-muted-foreground">累计加分</p>
+              <p className="mt-1 text-xs text-muted-foreground">累计加分</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">总扣分</CardTitle>
-              <TrendingUp className="h-4 w-4 text-red-600 rotate-180" />
+              <CardTitle className="text-sm font-medium text-muted-foreground">总扣分</CardTitle>
+              <TrendingUp className="h-4 w-4 rotate-180 text-destructive" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-red-600">
+              <div className="text-2xl font-semibold tabular-nums text-destructive">
                 {statistics.overallStats.totalNegativeScore}
               </div>
-              <p className="text-xs text-muted-foreground">累计扣分</p>
+              <p className="mt-1 text-xs text-muted-foreground">累计扣分</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">平均分值</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">平均分值</CardTitle>
               <Award className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-2xl font-semibold tabular-nums">
                 {statistics.overallStats.avgScore.toFixed(1)}
               </div>
-              <p className="text-xs text-muted-foreground">每条记录平均分值</p>
+              <p className="mt-1 text-xs text-muted-foreground">每条记录平均分值</p>
             </CardContent>
           </Card>
         </div>

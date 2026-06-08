@@ -136,12 +136,12 @@ export default function AwardsPage() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto p-6">
+      <div className="mx-auto max-w-screen-xl px-6 py-8">
         <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div className="mb-4 h-8 w-1/4 rounded bg-muted"></div>
+          <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="h-32 bg-gray-200 rounded"></div>
+              <div key={i} className="h-32 rounded-lg bg-muted"></div>
             ))}
           </div>
         </div>
@@ -150,18 +150,15 @@ export default function AwardsPage() {
   }
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="mx-auto max-w-screen-xl px-6 py-8">
       {/* 页面标题 */}
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-3xl font-bold">年度评优</h1>
-          <p className="text-muted-foreground">管理年度评优记录，生成评优结果和统计分析</p>
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div className="space-y-1.5">
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground">年度评优</h1>
+          <p className="text-sm leading-relaxed text-muted-foreground">管理年度评优记录，生成评优结果和统计分析</p>
         </div>
         <div className="flex gap-2">
-          <Button 
-            onClick={() => setIsGenerateOpen(true)}
-            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
-          >
+          <Button variant="outline" onClick={() => setIsGenerateOpen(true)}>
             <Trophy className="mr-2 h-4 w-4" />
             生成评优
           </Button>
@@ -173,15 +170,15 @@ export default function AwardsPage() {
       </div>
 
       {/* 统计卡片 */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
-              <div>
+              <div className="space-y-1">
                 <p className="text-sm font-medium text-muted-foreground">总获奖数</p>
-                <p className="text-2xl font-bold">{overallStats.totalAwards}</p>
+                <p className="text-2xl font-semibold tabular-nums">{overallStats.totalAwards}</p>
               </div>
-              <Trophy className="h-8 w-8 text-yellow-500" />
+              <Trophy className="h-5 w-5 text-muted-foreground" />
             </div>
           </CardContent>
         </Card>
@@ -189,11 +186,11 @@ export default function AwardsPage() {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
-              <div>
+              <div className="space-y-1">
                 <p className="text-sm font-medium text-muted-foreground">总奖金</p>
-                <p className="text-2xl font-bold">¥{overallStats.totalBonus.toLocaleString()}</p>
+                <p className="text-2xl font-semibold tabular-nums">¥{overallStats.totalBonus.toLocaleString()}</p>
               </div>
-              <DollarSign className="h-8 w-8 text-green-500" />
+              <DollarSign className="h-5 w-5 text-muted-foreground" />
             </div>
           </CardContent>
         </Card>
@@ -201,11 +198,11 @@ export default function AwardsPage() {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
-              <div>
+              <div className="space-y-1">
                 <p className="text-sm font-medium text-muted-foreground">平均得分</p>
-                <p className="text-2xl font-bold">{overallStats.avgScore.toFixed(1)}</p>
+                <p className="text-2xl font-semibold tabular-nums">{overallStats.avgScore.toFixed(1)}</p>
               </div>
-              <TrendingUp className="h-8 w-8 text-blue-500" />
+              <TrendingUp className="h-5 w-5 text-muted-foreground" />
             </div>
           </CardContent>
         </Card>
@@ -213,13 +210,13 @@ export default function AwardsPage() {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
-              <div>
+              <div className="space-y-1">
                 <p className="text-sm font-medium text-muted-foreground">得分范围</p>
-                <p className="text-2xl font-bold">
+                <p className="text-2xl font-semibold tabular-nums">
                   {overallStats.minScore.toFixed(1)} - {overallStats.maxScore.toFixed(1)}
                 </p>
               </div>
-              <Award className="h-8 w-8 text-purple-500" />
+              <Award className="h-5 w-5 text-muted-foreground" />
             </div>
           </CardContent>
         </Card>

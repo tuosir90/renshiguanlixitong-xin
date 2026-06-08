@@ -18,6 +18,7 @@ import {
   ResponsiveContainer
 } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/layout/card';
+import { CHART_COLORS, chartAxisProps, chartGridProps, chartTooltipProps } from '@/lib/chart-theme';
 
 // 月度招聘趋势图
 interface MonthlyTrendProps {
@@ -37,72 +38,23 @@ export function MonthlyTrendChart({ data }: MonthlyTrendProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>月度招聘趋势</CardTitle>
+        <CardTitle className="text-base">月度招聘趋势</CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
           <AreaChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="month" />
-            <YAxis />
-            <Tooltip />
+            <CartesianGrid {...chartGridProps} />
+            <XAxis dataKey="month" {...chartAxisProps} />
+            <YAxis {...chartAxisProps} />
+            <Tooltip {...chartTooltipProps} />
             <Legend />
-            <Area
-              type="monotone"
-              dataKey="total"
-              stackId="1"
-              stroke="#8884d8"
-              fill="#8884d8"
-              name="总面试人数"
-            />
-            <Area
-              type="monotone"
-              dataKey="regularized"
-              stackId="2"
-              stroke="#82ca9d"
-              fill="#82ca9d"
-              name="已转正"
-            />
-            <Area
-              type="monotone"
-              dataKey="pendingDecision"
-              stackId="2"
-              stroke="#64748b"
-              fill="#64748b"
-              name="待定"
-            />
-            <Area
-              type="monotone"
-              dataKey="trialing"
-              stackId="2"
-              stroke="#ffc658"
-              fill="#ffc658"
-              name="试岗中"
-            />
-            <Area
-              type="monotone"
-              dataKey="pendingArrival"
-              stackId="2"
-              stroke="#ff7300"
-              fill="#ff7300"
-              name="可试岗待到岗"
-            />
-            <Area
-              type="monotone"
-              dataKey="noShow"
-              stackId="2"
-              stroke="#94a3b8"
-              fill="#94a3b8"
-              name="未到岗"
-            />
-            <Area
-              type="monotone"
-              dataKey="rejected"
-              stackId="2"
-              stroke="#ff0000"
-              fill="#ff0000"
-              name="已拒绝"
-            />
+            <Area type="monotone" dataKey="total" stackId="1" stroke={CHART_COLORS[0]} fill={CHART_COLORS[0]} fillOpacity={0.15} name="总面试人数" />
+            <Area type="monotone" dataKey="regularized" stackId="2" stroke={CHART_COLORS[1]} fill={CHART_COLORS[1]} fillOpacity={0.15} name="已转正" />
+            <Area type="monotone" dataKey="pendingDecision" stackId="2" stroke={CHART_COLORS[2]} fill={CHART_COLORS[2]} fillOpacity={0.15} name="待定" />
+            <Area type="monotone" dataKey="trialing" stackId="2" stroke={CHART_COLORS[3]} fill={CHART_COLORS[3]} fillOpacity={0.15} name="试岗中" />
+            <Area type="monotone" dataKey="pendingArrival" stackId="2" stroke={CHART_COLORS[4]} fill={CHART_COLORS[4]} fillOpacity={0.15} name="可试岗待到岗" />
+            <Area type="monotone" dataKey="noShow" stackId="2" stroke={CHART_COLORS[2]} fill={CHART_COLORS[2]} fillOpacity={0.1} name="未到岗" />
+            <Area type="monotone" dataKey="rejected" stackId="2" stroke={CHART_COLORS[4]} fill={CHART_COLORS[4]} fillOpacity={0.1} name="已拒绝" />
           </AreaChart>
         </ResponsiveContainer>
       </CardContent>
@@ -119,13 +71,11 @@ interface StatusDistributionProps {
   }>;
 }
 
-const COLORS = ['#64748B', '#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#94A3B8'];
-
 export function StatusDistributionChart({ data }: StatusDistributionProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>招聘状态分布</CardTitle>
+        <CardTitle className="text-base">招聘状态分布</CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
@@ -144,14 +94,13 @@ export function StatusDistributionChart({ data }: StatusDistributionProps) {
                 return `${status || ''}: ${count || 0} (${((percent || 0) * 100).toFixed(1)}%)`;
               }}
               outerRadius={80}
-              fill="#8884d8"
               dataKey="count"
             >
               {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
               ))}
             </Pie>
-            <Tooltip />
+            <Tooltip {...chartTooltipProps} />
           </PieChart>
         </ResponsiveContainer>
       </CardContent>
@@ -173,27 +122,20 @@ export function RegularizationTrendChart({ data }: RegularizationTrendProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>转正率趋势</CardTitle>
+        <CardTitle className="text-base">转正率趋势</CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="month" />
-            <YAxis yAxisId="left" />
-            <YAxis yAxisId="right" orientation="right" />
-            <Tooltip />
+            <CartesianGrid {...chartGridProps} />
+            <XAxis dataKey="month" {...chartAxisProps} />
+            <YAxis yAxisId="left" {...chartAxisProps} />
+            <YAxis yAxisId="right" orientation="right" {...chartAxisProps} />
+            <Tooltip {...chartTooltipProps} />
             <Legend />
-            <Bar yAxisId="left" dataKey="arrived" fill="#8884d8" name="到岗人数" />
-            <Bar yAxisId="left" dataKey="regularized" fill="#82ca9d" name="转正人数" />
-            <Line
-              yAxisId="right"
-              type="monotone"
-              dataKey="regularizationRate"
-              stroke="#ff7300"
-              strokeWidth={2}
-              name="转正率(%)"
-            />
+            <Bar yAxisId="left" dataKey="arrived" fill={CHART_COLORS[2]} name="到岗人数" radius={[3, 3, 0, 0]} />
+            <Bar yAxisId="left" dataKey="regularized" fill={CHART_COLORS[0]} name="转正人数" radius={[3, 3, 0, 0]} />
+            <Line yAxisId="right" type="monotone" dataKey="regularizationRate" stroke={CHART_COLORS[0]} strokeWidth={2} name="转正率(%)" />
           </BarChart>
         </ResponsiveContainer>
       </CardContent>
@@ -215,18 +157,18 @@ export function ChannelAnalysisChart({ data }: ChannelAnalysisProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>招聘渠道分析</CardTitle>
+        <CardTitle className="text-base">招聘渠道分析</CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={data} layout="horizontal">
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis type="number" />
-            <YAxis dataKey="channel" type="category" width={80} />
-            <Tooltip />
+            <CartesianGrid {...chartGridProps} />
+            <XAxis type="number" {...chartAxisProps} />
+            <YAxis dataKey="channel" type="category" width={80} {...chartAxisProps} />
+            <Tooltip {...chartTooltipProps} />
             <Legend />
-            <Bar dataKey="total" fill="#8884d8" name="总面试人数" />
-            <Bar dataKey="regularized" fill="#82ca9d" name="转正人数" />
+            <Bar dataKey="total" fill={CHART_COLORS[2]} name="总面试人数" radius={[0, 3, 3, 0]} />
+            <Bar dataKey="regularized" fill={CHART_COLORS[0]} name="转正人数" radius={[0, 3, 3, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </CardContent>
@@ -244,22 +186,22 @@ interface MetricCardProps {
   suffix?: string;
 }
 
-export function MetricCard({ 
-  title, 
-  value, 
-  change, 
-  changeType = 'neutral', 
-  icon, 
-  suffix = '' 
+export function MetricCard({
+  title,
+  value,
+  change,
+  changeType = 'neutral',
+  icon,
+  suffix = ''
 }: MetricCardProps) {
   const getChangeColor = () => {
     switch (changeType) {
       case 'increase':
-        return 'text-green-600';
+        return 'text-success';
       case 'decrease':
-        return 'text-red-600';
+        return 'text-destructive';
       default:
-        return 'text-gray-600';
+        return 'text-muted-foreground';
     }
   };
 
@@ -277,21 +219,23 @@ export function MetricCard({
   return (
     <Card>
       <CardContent className="p-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            {icon && <div className="text-2xl">{icon}</div>}
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{title}</p>
-              <p className="text-2xl font-bold">
-                {value}{suffix}
+        <div className="flex items-center justify-between gap-3">
+          <div className="space-y-1">
+            <p className="text-sm font-medium text-muted-foreground">{title}</p>
+            <p className="text-2xl font-semibold tabular-nums">
+              {value}{suffix}
+            </p>
+            {change !== undefined && (
+              <p className={`text-xs ${getChangeColor()}`}>
+                {getChangeIcon()} {Math.abs(change)}% 较上月
               </p>
-              {change !== undefined && (
-                <p className={`text-xs ${getChangeColor()}`}>
-                  {getChangeIcon()} {Math.abs(change)}% 较上月
-                </p>
-              )}
-            </div>
+            )}
           </div>
+          {icon && (
+            <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md border border-border bg-muted text-muted-foreground [&_svg]:h-4 [&_svg]:w-4">
+              {icon}
+            </span>
+          )}
         </div>
       </CardContent>
     </Card>
