@@ -1,10 +1,14 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI;
+const getMongoDBUri = () => {
+  const uri = process.env.MONGODB_URI;
 
-if (!MONGODB_URI) {
-  throw new Error('请在环境变量中设置 MONGODB_URI');
-}
+  if (!uri) {
+    throw new Error('请在环境变量中设置 MONGODB_URI');
+  }
+
+  return uri;
+};
 
 interface MongooseCache {
   conn: typeof mongoose | null;
@@ -28,6 +32,7 @@ async function connectDB(): Promise<typeof mongoose> {
   }
 
   if (!cached!.promise) {
+    const mongodbUri = getMongoDBUri();
     const opts = {
       bufferCommands: false,
       maxPoolSize: 10, // 维护最多10个socket连接
@@ -36,7 +41,7 @@ async function connectDB(): Promise<typeof mongoose> {
       family: 4, // 使用IPv4，跳过IPv6
     };
 
-    cached!.promise = mongoose.connect(MONGODB_URI!, opts).then((mongoose) => {
+    cached!.promise = mongoose.connect(mongodbUri, opts).then((mongoose) => {
       console.log('✅ MongoDB连接成功');
       return mongoose;
     }).catch((error) => {
