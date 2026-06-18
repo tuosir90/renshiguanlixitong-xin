@@ -51,4 +51,23 @@ assert.equal(
   '待定状态应通过招聘记录模型校验'
 );
 
+const recordWithoutPhone = new RecruitmentRecord({
+  interviewDate: new Date('2026-04-01'),
+  candidateName: '王测试',
+  city: '宜昌',
+  gender: 'female',
+  age: 26,
+  appliedPosition: '运营',
+  department: '运营部',
+  recruitmentStatus: 'pending_decision',
+});
+
+const noPhoneValidationError = recordWithoutPhone.validateSync();
+
+assert.equal(
+  noPhoneValidationError,
+  undefined,
+  '招聘记录不填写电话号码时应通过模型校验'
+);
+
 console.log('招聘状态待定回归测试通过');

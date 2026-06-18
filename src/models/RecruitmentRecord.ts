@@ -84,9 +84,11 @@ const RecruitmentRecordSchema = new Schema<RecruitmentRecordDocument>(
     },
     phone: {
       type: String,
-      required: [true, '电话号码不能为空'],
+      required: false,
+      trim: true,
       validate: {
         validator: function(value: string) {
+          if (!value) return true;
           return /^1[3-9]\d{9}$/.test(value);
         },
         message: '请输入有效的手机号码'

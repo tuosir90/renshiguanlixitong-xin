@@ -23,7 +23,7 @@ export const syncEmployeeFromRecruitment = async (record: {
   candidateName: string;
   city?: '宜昌' | '武汉';
   gender: 'male' | 'female';
-  phone: string;
+  phone?: string | null;
   idCard?: string | null;
   arrivalDate?: Date | string | null;
   appliedPosition?: string;
@@ -35,6 +35,10 @@ export const syncEmployeeFromRecruitment = async (record: {
 
   if (!record.idCard) {
     throw new Error('招聘状态改为已转正前，必须先填写身份证号');
+  }
+
+  if (!record.phone) {
+    throw new Error('招聘状态改为已转正前，必须先填写电话号码');
   }
 
   const existingEmployee = await Employee.findOne({

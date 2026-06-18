@@ -447,7 +447,7 @@ export default function RecruitmentList({
                       <TableCell onClick={(e) => e.stopPropagation()}>
                         {record.idCard ? <IdCardDisplay idCard={record.idCard} /> : <span className="text-gray-400 text-sm">未填写</span>}
                       </TableCell>
-                      <TableCell className="font-mono text-sm">{record.phone}</TableCell>
+                      <TableCell className="font-mono text-sm">{record.phone || '-'}</TableCell>
                       <TableCell>
                         <Badge variant="outline">{record.appliedPosition || '未分配'}</Badge>
                       </TableCell>
@@ -551,7 +551,7 @@ export default function RecruitmentList({
                 </div>
                 <div>
                   <p className="text-muted-foreground">电话</p>
-                  <p className="font-medium">{detailRecord.phone}</p>
+                  <p className="font-medium">{detailRecord.phone || '-'}</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground">应聘岗位</p>

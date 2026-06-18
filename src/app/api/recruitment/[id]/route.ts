@@ -31,7 +31,10 @@ const updateRecruitmentRecordSchema = z.object({
     if (!val || val.trim() === '') return true;
     return /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/.test(val);
   }, '请输入有效的身份证号'),
-  phone: z.string().regex(/^1[3-9]\d{9}$/, '请输入有效的手机号码').optional(),
+  phone: z.string().optional().refine((val) => {
+    if (!val || val.trim() === '') return true;
+    return /^1[3-9]\d{9}$/.test(val.trim());
+  }, '请输入有效的手机号码'),
   appliedPosition: z.enum([
     '销售主管', '人事主管', '运营主管',
     '销售', '运营', '助理', '客服', '美工', '未分配'
@@ -113,6 +116,10 @@ export async function PUT(
     const normalizedIdCard = validatedData.idCard?.trim()
       ? validatedData.idCard
       : undefined;
+    const hasPhoneField = Object.prototype.hasOwnProperty.call(validatedData, 'phone');
+    const normalizedPhone = validatedData.phone?.trim()
+      ? validatedData.phone.trim()
+      : undefined;
 
     if (normalizedIdCard && normalizedIdCard !== existingRecord.idCard) {
       const duplicateRecord = await RecruitmentRecord.findOne({
@@ -128,9 +135,9 @@ export async function PUT(
       }
     }
 
-    if (validatedData.phone && validatedData.phone !== existingRecord.phone) {
+    if (normalizedPhone && normalizedPhone !== existingRecord.phone) {
       const duplicatePhone = await RecruitmentRecord.findOne({
-        phone: validatedData.phone,
+        phone: normalizedPhone,
         _id: { $ne: id }
       });
 
@@ -146,6 +153,7 @@ export async function PUT(
       validatedData.recruitmentStatus || existingRecord.recruitmentStatus
     );
     const nextArrivalDate = validatedData.arrivalDate ?? getArrivalDate(existingRecord.toObject());
+    const nextPhone = hasPhoneField ? normalizedPhone : existingRecord.phone;
 
     if (requiresArrivalDate(nextStatus) && !nextArrivalDate) {
       return NextResponse.json(
@@ -154,9 +162,13 @@ export async function PUT(
       );
     }
 
+    const { phone, ...validatedDataWithoutPhone } = validatedData;
+    void phone;
+
     const updateData = {
-      ...validatedData,
+      ...validatedDataWithoutPhone,
       idCard: normalizedIdCard,
+      ...(normalizedPhone ? { phone: normalizedPhone } : {}),
       recruitmentStatus: nextStatus,
       arrivalDate: nextArrivalDate,
       regularizedDate: nextStatus === 'regularized'
@@ -176,7 +188,7 @@ export async function PUT(
         candidateName: validatedData.candidateName || existingRecord.candidateName,
         city: validatedData.city || existingRecord.city || '宜昌',
         gender: validatedData.gender || existingRecord.gender,
-        phone: validatedData.phone || existingRecord.phone,
+        phone: nextPhone,
         idCard: normalizedIdCard ?? existingRecord.idCard,
         arrivalDate: nextArrivalDate,
         appliedPosition: validatedData.appliedPosition || existingRecord.appliedPosition,
@@ -186,7 +198,9 @@ export async function PUT(
 
     const updatedRecord = await RecruitmentRecord.findByIdAndUpdate(
       id,
-      { $set: updateData },
+      hasPhoneField && !normalizedPhone
+        ? { $set: updateData, $unset: { phone: '' } }
+        : { $set: updateData },
       { new: true, runValidators: true }
     );
 

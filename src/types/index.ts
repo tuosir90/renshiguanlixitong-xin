@@ -10,7 +10,7 @@ export interface RecruitmentRecord {
   gender: 'male' | 'female';
   age: number;
   idCard?: string;
-  phone: string;
+  phone?: string;
   appliedPosition?: string; // 新增：应聘岗位
   department?: string;
   arrivalDate?: Date;

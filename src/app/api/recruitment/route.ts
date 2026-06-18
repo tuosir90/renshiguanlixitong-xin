@@ -24,7 +24,10 @@ const recruitmentRecordSchema = z.object({
     if (!val || val.trim() === '') return true;
     return /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/.test(val);
   }, '请输入有效的身份证号'),
-  phone: z.string().regex(/^1[3-9]\d{9}$/, '请输入有效的手机号码'),
+  phone: z.string().optional().refine((val) => {
+    if (!val || val.trim() === '') return true;
+    return /^1[3-9]\d{9}$/.test(val.trim());
+  }, '请输入有效的手机号码'),
   appliedPosition: z.enum([
     '销售主管', '人事主管', '运营主管',
     '销售', '运营', '助理', '客服', '美工', '未分配'
@@ -121,6 +124,9 @@ export async function POST(request: NextRequest) {
     const normalizedIdCard = validatedData.idCard?.trim()
       ? validatedData.idCard
       : undefined;
+    const normalizedPhone = validatedData.phone?.trim()
+      ? validatedData.phone.trim()
+      : undefined;
 
     if (requiresArrivalDate(validatedData.recruitmentStatus) && !validatedData.arrivalDate) {
       return NextResponse.json(
@@ -142,13 +148,13 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const existingPhoneRecord = await RecruitmentRecord.findOne({
-      phone: validatedData.phone
-    });
+    const existingPhoneRecord = normalizedPhone
+      ? await RecruitmentRecord.findOne({ phone: normalizedPhone })
+      : null;
 
     if (existingPhoneRecord) {
       return NextResponse.json(
-        { success: false, error: `手机号 ${validatedData.phone} 已存在招聘记录，应聘者：${existingPhoneRecord.candidateName}` },
+        { success: false, error: `手机号 ${normalizedPhone} 已存在招聘记录，应聘者：${existingPhoneRecord.candidateName}` },
         { status: 400 }
       );
     }
@@ -167,7 +173,7 @@ export async function POST(request: NextRequest) {
         candidateName: validatedData.candidateName,
         city: validatedData.city,
         gender: validatedData.gender,
-        phone: validatedData.phone,
+        phone: normalizedPhone,
         idCard: normalizedIdCard,
         arrivalDate: validatedData.arrivalDate,
         appliedPosition: validatedData.appliedPosition,
@@ -178,6 +184,7 @@ export async function POST(request: NextRequest) {
     const newRecord = new RecruitmentRecord({
       ...validatedData,
       idCard: normalizedIdCard,
+      phone: normalizedPhone,
       regularizedDate,
       trialDays
     });

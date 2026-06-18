@@ -41,7 +41,10 @@ const formSchema = z.object({
     if (!val || val.trim() === '') return true;
     return /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/.test(val);
   }, '请输入有效的身份证号'),
-  phone: z.string().regex(/^1[3-9]\d{9}$/, '请输入有效的手机号码'),
+  phone: z.string().optional().refine((val) => {
+    if (!val || val.trim() === '') return true;
+    return /^1[3-9]\d{9}$/.test(val.trim());
+  }, '请输入有效的手机号码'),
   appliedPosition: z.string().min(1, '请选择应聘岗位'),
   department: z.enum(['销售部', '运营部', '人事部', '未分配'], { message: '请选择部门' }),
   arrivalDate: z.string().optional(),
@@ -58,8 +61,9 @@ const formSchema = z.object({
 });
 
 type RecruitmentFormValues = z.input<typeof formSchema>;
-type RecruitmentSubmitData = Omit<RecruitmentFormValues, 'age'> & {
+type RecruitmentSubmitData = Omit<RecruitmentFormValues, 'age' | 'phone'> & {
   age: number;
+  phone?: string;
 };
 
 interface RecruitmentFormProps {
@@ -113,7 +117,8 @@ export default function RecruitmentForm({
     try {
       const submissionData = {
         ...data,
-        age: parseInt(data.age)
+        age: parseInt(data.age),
+        phone: data.phone?.trim() || ''
       };
       await onSubmit(submissionData);
     } catch (error) {
@@ -250,9 +255,9 @@ export default function RecruitmentForm({
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>电话号码 *</FormLabel>
+                    <FormLabel>电话号码</FormLabel>
                     <FormControl>
-                      <Input placeholder="请输入11位手机号" {...field} />
+                      <Input placeholder="请输入11位手机号（可选）" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
